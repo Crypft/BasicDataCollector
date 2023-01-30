@@ -20,15 +20,15 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-
+from datetime import datetime
 # Create lists to store the scraped information
 dates = []
 titles = []
 urls = []
 
 # Make a GET request to the webpage
-for i in range(0, 44):
-    url = f'https://www.24chasa.bg/search?q=%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%20%D0%B1%D0%B5%D0%B6%D0%B0%D0%BD%D1%86%D0%B8&page={i}'
+for i in range(0, 22):
+    url = f'https://blitz.bg/search?q=%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%20%D0%B1%D0%B5%D0%B6%D0%B0%D0%BD%D1%86%D0%B8&page={i}'
     response = requests.get(url)
     html = response.text
 
@@ -36,21 +36,18 @@ for i in range(0, 44):
     soup = BeautifulSoup(html, 'html.parser')
 
     # Find the elements containing the article information
-    articles = soup.find_all('article', class_='grid-layout-item')
+    articles = soup.find_all('div', class_='single-tech-inner-news')
 
 
     # Use a loop to extract the information from each article
 
     for article in articles:
-        date = article.find('time')['datetime']
-        date = date.split()
-        date.pop(1)
-        date_list = date[0].split('-')
-        date_list.pop(3)
-        my_order = [1, 2, 0]
-        date_list = [date_list[i] for i in my_order]
-        date_list[2] = '22'
-        date_final = f'{date_list[0]}/{date_list[1]}/{date_list[2]}'
+        date = article.find_all('span')
+        date_dirty = str(date[1])
+        date_object = datetime.strptime(date_dirty[6:16], '%d.%m.%Y')
+        date_str = str(date_object.date())
+        date_list = date_str.split('-')
+        date_final = f'{date_list[1]}/{date_list[2]}/{date_list[0][2:]}'
 
         title = article.find('h3').text
         title = title.replace('\n', '')
