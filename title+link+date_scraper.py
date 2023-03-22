@@ -1,22 +1,3 @@
-# from bs4 import BeautifulSoup
-# import requests
-# import pandas as pd
-#
-# url = 'https://www.example.com/article'
-# response = requests.get(url)
-# html = response.text
-#
-# soup = BeautifulSoup(html, 'html.parser')
-# comments = soup.find_all('div', {'class': 'comment-content'})
-#
-# comments_list = []
-# for comment in comments:
-#     comments_list.append(comment.text)
-#
-# df = pd.DataFrame(comments_list, columns=['comments'])
-#
-# df.to_csv('comments.csv', index=False)
-
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
